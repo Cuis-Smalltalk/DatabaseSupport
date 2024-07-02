@@ -1,6 +1,6 @@
-'From Cuis 6.0 [latest update: #6090] on 14 December 2023 at 1:25:06 pm'!
+'From Cuis7.1 [latest update: #6493] on 2 July 2024 at 9:37:57 am'!
 'Description '!
-!provides: 'ODBC' 1 6!
+!provides: 'ODBC' 1 7!
 !requires: 'FFI' 1 40 nil!
 SystemOrganization addCategory: #'ODBC-Constants'!
 SystemOrganization addCategory: #'ODBC-Core'!
@@ -1107,13 +1107,13 @@ new
 value
 	"This method was automatically generated. See SQLByte class>>fields."
 	<generated>
-	^handle ffiUint8At: 1! !
+	^handle uint8At: 1! !
 
 !SQLByte methodsFor: 'accessing'!
 value: anObject
 	"This method was automatically generated. See SQLByte class>>fields."
 	<generated>
-	handle ffiUint8At: 1 put: anObject! !
+	handle uint8At: 1 put: anObject! !
 
 !SQLByte class methodsFor: 'accessing' stamp: 'jfr 11/14/2023 17:07:47'!
 fields
@@ -1131,37 +1131,37 @@ initialize
 day
 	"This method was automatically generated. See SQLDate class>>fields."
 	<generated>
-	^handle ffiUint16At: 5! !
+	^handle uint16At: 5! !
 
 !SQLDate methodsFor: 'accessing'!
 day: anObject
 	"This method was automatically generated. See SQLDate class>>fields."
 	<generated>
-	handle ffiUint16At: 5 put: anObject! !
+	handle uint16At: 5 put: anObject! !
 
 !SQLDate methodsFor: 'accessing'!
 month
 	"This method was automatically generated. See SQLDate class>>fields."
 	<generated>
-	^handle ffiUint16At: 3! !
+	^handle uint16At: 3! !
 
 !SQLDate methodsFor: 'accessing'!
 month: anObject
 	"This method was automatically generated. See SQLDate class>>fields."
 	<generated>
-	handle ffiUint16At: 3 put: anObject! !
+	handle uint16At: 3 put: anObject! !
 
 !SQLDate methodsFor: 'accessing'!
 year
 	"This method was automatically generated. See SQLDate class>>fields."
 	<generated>
-	^handle ffiInt16At: 1! !
+	^handle int16At: 1! !
 
 !SQLDate methodsFor: 'accessing'!
 year: anObject
 	"This method was automatically generated. See SQLDate class>>fields."
 	<generated>
-	handle ffiInt16At: 1 put: anObject! !
+	handle int16At: 1 put: anObject! !
 
 !SQLDate class methodsFor: 'accessing' stamp: 'jfr 11/14/2023 17:08:16'!
 fields
@@ -1227,13 +1227,13 @@ initialize
 value
 	"This method was automatically generated. See SQLHDBC class>>fields."
 	<generated>
-	^handle ffiInt64At: 1! !
+	^handle int64At: 1! !
 
 !SQLHDBC methodsFor: 'accessing'!
 value: anObject
 	"This method was automatically generated. See SQLHDBC class>>fields."
 	<generated>
-	handle ffiInt64At: 1 put: anObject! !
+	handle int64At: 1 put: anObject! !
 
 !SQLHDBC class methodsFor: 'accessing' stamp: 'jfr 11/14/2023 17:06:29'!
 fields
@@ -1251,13 +1251,13 @@ initialize
 value
 	"This method was automatically generated. See SQLHENV class>>fields."
 	<generated>
-	^handle ffiInt64At: 1! !
+	^handle int64At: 1! !
 
 !SQLHENV methodsFor: 'accessing'!
 value: anObject
 	"This method was automatically generated. See SQLHENV class>>fields."
 	<generated>
-	handle ffiInt64At: 1 put: anObject! !
+	handle int64At: 1 put: anObject! !
 
 !SQLHENV class methodsFor: 'accessing' stamp: 'jfr 11/14/2023 17:05:33'!
 fields
@@ -1275,13 +1275,13 @@ initialize
 value
 	"This method was automatically generated. See SQLHSTMT class>>fields."
 	<generated>
-	^handle ffiInt64At: 1! !
+	^handle int64At: 1! !
 
 !SQLHSTMT methodsFor: 'accessing'!
 value: anObject
 	"This method was automatically generated. See SQLHSTMT class>>fields."
 	<generated>
-	handle ffiInt64At: 1 put: anObject! !
+	handle int64At: 1 put: anObject! !
 
 !SQLHSTMT class methodsFor: 'accessing' stamp: 'jfr 11/14/2023 17:03:28'!
 fields
@@ -1299,13 +1299,13 @@ initialize
 value
 	"This method was automatically generated. See SQLInteger class>>fields."
 	<generated>
-	^handle ffiInt64At: 1! !
+	^handle int64At: 1! !
 
 !SQLInteger methodsFor: 'accessing'!
 value: anObject
 	"This method was automatically generated. See SQLInteger class>>fields."
 	<generated>
-	handle ffiInt64At: 1 put: anObject! !
+	handle int64At: 1 put: anObject! !
 
 !SQLInteger class methodsFor: 'accessing' stamp: 'jfr 11/14/2023 17:01:22'!
 fields
@@ -1323,13 +1323,13 @@ initialize
 value
 	"This method was automatically generated. See SQLShort class>>fields."
 	<generated>
-	^handle ffiInt16At: 1! !
+	^handle int16At: 1! !
 
 !SQLShort methodsFor: 'accessing'!
 value: anObject
 	"This method was automatically generated. See SQLShort class>>fields."
 	<generated>
-	handle ffiInt16At: 1 put: anObject! !
+	handle int16At: 1 put: anObject! !
 
 !SQLShort class methodsFor: 'accessing' stamp: 'jfr 11/14/2023 17:08:49'!
 fields
@@ -1347,13 +1347,13 @@ initialize
 value
 	"This method was automatically generated. See SQLSmallInteger class>>fields."
 	<generated>
-	^handle ffiInt16At: 1! !
+	^handle int16At: 1! !
 
 !SQLSmallInteger methodsFor: 'accessing'!
 value: anObject
 	"This method was automatically generated. See SQLSmallInteger class>>fields."
 	<generated>
-	handle ffiInt16At: 1 put: anObject! !
+	handle int16At: 1 put: anObject! !
 
 !SQLSmallInteger class methodsFor: 'accessing' stamp: 'jfr 11/14/2023 17:08:58'!
 fields
@@ -1374,37 +1374,37 @@ initialize
 hour
 	"This method was automatically generated. See SQLTime class>>fields."
 	<generated>
-	^handle ffiUint16At: 1! !
+	^handle uint16At: 1! !
 
 !SQLTime methodsFor: 'accessing'!
 hour: anObject
 	"This method was automatically generated. See SQLTime class>>fields."
 	<generated>
-	handle ffiUint16At: 1 put: anObject! !
+	handle uint16At: 1 put: anObject! !
 
 !SQLTime methodsFor: 'accessing'!
 minute
 	"This method was automatically generated. See SQLTime class>>fields."
 	<generated>
-	^handle ffiUint16At: 3! !
+	^handle uint16At: 3! !
 
 !SQLTime methodsFor: 'accessing'!
 minute: anObject
 	"This method was automatically generated. See SQLTime class>>fields."
 	<generated>
-	handle ffiUint16At: 3 put: anObject! !
+	handle uint16At: 3 put: anObject! !
 
 !SQLTime methodsFor: 'accessing'!
 second
 	"This method was automatically generated. See SQLTime class>>fields."
 	<generated>
-	^handle ffiUint16At: 5! !
+	^handle uint16At: 5! !
 
 !SQLTime methodsFor: 'accessing'!
 second: anObject
 	"This method was automatically generated. See SQLTime class>>fields."
 	<generated>
-	handle ffiUint16At: 5 put: anObject! !
+	handle uint16At: 5 put: anObject! !
 
 !SQLTime class methodsFor: 'accessing' stamp: 'jfr 11/14/2023 17:09:10'!
 fields
@@ -1422,85 +1422,85 @@ initialize
 day
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	^handle ffiUint16At: 5! !
+	^handle uint16At: 5! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 day: anObject
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	handle ffiUint16At: 5 put: anObject! !
+	handle uint16At: 5 put: anObject! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 fraction
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	^handle ffiUint32At: 13! !
+	^handle uint32At: 13! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 fraction: anObject
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	handle ffiUint32At: 13 put: anObject! !
+	handle uint32At: 13 put: anObject! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 hour
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	^handle ffiUint16At: 7! !
+	^handle uint16At: 7! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 hour: anObject
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	handle ffiUint16At: 7 put: anObject! !
+	handle uint16At: 7 put: anObject! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 minute
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	^handle ffiUint16At: 9! !
+	^handle uint16At: 9! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 minute: anObject
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	handle ffiUint16At: 9 put: anObject! !
+	handle uint16At: 9 put: anObject! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 month
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	^handle ffiUint16At: 3! !
+	^handle uint16At: 3! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 month: anObject
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	handle ffiUint16At: 3 put: anObject! !
+	handle uint16At: 3 put: anObject! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 second
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	^handle ffiUint16At: 11! !
+	^handle uint16At: 11! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 second: anObject
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	handle ffiUint16At: 11 put: anObject! !
+	handle uint16At: 11 put: anObject! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 year
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	^handle ffiInt16At: 1! !
+	^handle int16At: 1! !
 
 !SQLTimestamp methodsFor: 'accessing'!
 year: anObject
 	"This method was automatically generated. See SQLTimestamp class>>fields."
 	<generated>
-	handle ffiInt16At: 1 put: anObject! !
+	handle int16At: 1 put: anObject! !
 
 !SQLTimestamp class methodsFor: 'accessing' stamp: 'jfr 11/14/2023 17:09:37'!
 fields
@@ -1518,13 +1518,13 @@ initialize
 value
 	"This method was automatically generated. See SQLUInteger class>>fields."
 	<generated>
-	^handle ffiUint64At: 1! !
+	^handle uint64At: 1! !
 
 !SQLUInteger methodsFor: 'accessing'!
 value: anObject
 	"This method was automatically generated. See SQLUInteger class>>fields."
 	<generated>
-	handle ffiUint64At: 1 put: anObject! !
+	handle uint64At: 1 put: anObject! !
 
 !SQLUInteger class methodsFor: 'accessing' stamp: 'jfr 11/14/2023 16:58:34'!
 fields
@@ -2688,7 +2688,7 @@ bind: arguments
 	].
 ! !
 
-!ODBCStatement methodsFor: 'executing' stamp: 'jmv 12/8/2023 09:35:56'!
+!ODBCStatement methodsFor: 'executing' stamp: 'fgz 7/2/2024 09:36:04'!
 bindArg: arg
 	"Bind the argument at the given position"
 	| buf sz |
@@ -2696,7 +2696,7 @@ bindArg: arg
 	arg isString ifTrue:[
 		sz := arg size.
 		buf := ExternalAddress allocate: sz.
-		1 to: sz do:[:b| buf unsignedByteAt: b put: (arg ffiUint8At: b)].
+		1 to: sz do:[:b| buf unsignedByteAt: b put: (arg uint8At: b)].
 		^(ODBCBoundParameter new)
 			handle: buf; cType: SQLCCHAR; sqlType: SQLVARCHAR; 
 			colWidth: sz; size: sz].
@@ -2763,7 +2763,7 @@ execute: args
 	self sqlExecDirect: query.
 	^ODBCResultSet connection: connection statement: self! !
 
-!ODBCStatement methodsFor: 'executing' stamp: 'jmv 12/8/2023 09:35:52'!
+!ODBCStatement methodsFor: 'executing' stamp: 'fgz 7/2/2024 09:36:14'!
 fillArg: buf with: arg
 	"Fill a bound parameter with a new value. Answer true if successful, false otherwise"
 	| argHandle |
@@ -2774,7 +2774,7 @@ fillArg: buf with: arg
 		[SQLVARCHAR] -> [
 			arg isString ifFalse:[^false].
 			arg size > buf size ifTrue:[^false].
-			1 to: arg size do:[:b| argHandle unsignedByteAt: b put: (arg ffiUint8At: b)].
+			1 to: arg size do:[:b| argHandle unsignedByteAt: b put: (arg uint8At: b)].
 			^true
 		].
 		[SQLINTEGER] -> [
