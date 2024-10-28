@@ -613,7 +613,7 @@ fetchRow
 	ret == SQLNODATAFOUND ifTrue: [^ nil].
 	connection checkSQLReturn: ret statement: handle.
 	""
-	row := ODBCRow new: columns size.
+	row := ODBCRow new.
 	columns do: [:each | row at: each name put: each data]. 
 	^ row! !
 
