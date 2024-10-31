@@ -73,7 +73,7 @@ Create that file with contents similar to the following,
 which defines a data source for a SQLite database in the file `todos.db`:
 
 ```text
-[DogsDSN]
+[PetsDSN]
 Description = Postgres database for pets
 Driver = PostgreSQL
 Database = pets
