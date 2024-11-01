@@ -1,6 +1,6 @@
-'From Cuis7.1 [latest update: #6493] on 2 July 2024 at 9:37:57 am'!
+'From Cuis7.1 [latest update: #6797] on 30 October 2024 at 9:06:56 pm'!
 'Description '!
-!provides: 'ODBC' 1 7!
+!provides: 'ODBC' 1 9!
 !requires: 'FFI' 1 40 nil!
 SystemOrganization addCategory: #'ODBC-Constants'!
 SystemOrganization addCategory: #'ODBC-Core'!
@@ -219,7 +219,7 @@ ODBCBoundParameter class
 
 !classDefinition: #ODBCColumn category: #'ODBC-Core'!
 Object subclass: #ODBCColumn
-	instanceVariableNames: 'connection resultSet resultSetHandle number name dataType cType convertSelector initializeSelector size decimals nullable buffer bufferLenght'
+	instanceVariableNames: 'connection resultSet resultSetHandle number name dataType cType convertSelector initializeSelector size decimals nullable buffer bufferLength'
 	classVariableNames: 'DataTypes'
 	poolDictionaries: 'ODBCConstants'
 	category: 'ODBC-Core'!
@@ -1602,13 +1602,13 @@ initialize
 	digits := 0.
 	size := 0.! !
 
-!ODBCColumn methodsFor: 'private - type convertion' stamp: 'fap 8/14/2009 13:10'!
+!ODBCColumn methodsFor: 'private - type convertion' stamp: 'RMV 10/30/2024 20:54:58'!
 asNumber: aString 
 	"creates a Number from aString. Could be an Integer or a Fraction"
 	| stream zero sign integerPart char fractionPart scale |
 	stream := aString readStream.
 	""
-	zero := $0 asInteger.
+	zero := 0.
 	sign := (stream peekFor: $-)
 				ifTrue: [-1]
 				ifFalse: [1].
@@ -1616,14 +1616,14 @@ asNumber: aString
 	integerPart := 0.
 	[stream atEnd
 		or: [(char := stream next) == $.]]
-		whileFalse: [integerPart := integerPart * 10 + (char asInteger - zero)].
+		whileFalse: [integerPart := integerPart * 10 + (char digitValue - zero)].
 	""
 	fractionPart := 0.
 	scale := 1.
 	[stream atEnd]
 		whileFalse: [""
 			char := stream next.
-			fractionPart := fractionPart * 10 + (char asInteger - zero).
+			fractionPart := fractionPart * 10 + (char digitValue - zero).
 			scale := scale * 10].
 	""
 	^ sign * (integerPart * scale + fractionPart / scale)! !
@@ -1685,11 +1685,11 @@ stringData
 	"answer the data for this column in the current row as a String"
 	^ self stringFromBuffer ! !
 
-!ODBCColumn methodsFor: 'private - type convertion' stamp: 'jfr 11/14/2023 16:46:22'!
+!ODBCColumn methodsFor: 'private - type convertion' stamp: 'RMV 10/30/2024 20:58:05'!
 stringFromBuffer
 	"convert the buffer to a String"
 	| len result |
-	len := bufferLenght value min: BUFFERSIZE.
+	len := bufferLength value min: BUFFERSIZE.
 	result := String new: len.
 	1 to: len do: [:index | 
 		result at: index put: (buffer unsignedCharAt: index)
@@ -1702,7 +1702,7 @@ timeData
 
 	^ Time fromSeconds: buffer hour * 3600 + (buffer minute * 60) + buffer second! !
 
-!ODBCColumn methodsFor: 'initialization' stamp: 'jfr 11/13/2023 16:02:42'!
+!ODBCColumn methodsFor: 'initialization' stamp: 'RMV 10/30/2024 20:57:35'!
 bindBuffer
 	"bind the column's buffer"
 	| bufferSize bufferHandle |
@@ -1726,14 +1726,14 @@ bindBuffer
 						fromHandle: bufferHandle
 						type: ExternalType void)
 				bufferLength: bufferSize
-				strLength: bufferLenght)
+				strLength: bufferLength)
 		statement: resultSetHandle! !
 
-!ODBCColumn methodsFor: 'initialization' stamp: 'dgd 6/2/2002 20:07'!
+!ODBCColumn methodsFor: 'initialization' stamp: 'RMV 10/30/2024 20:57:53'!
 free
 	"free the associated resources"
-	bufferLenght notNil
-		ifTrue: [bufferLenght free].
+	bufferLength notNil
+		ifTrue: [bufferLength free].
 	buffer notNil
 		ifTrue: [buffer free]! !
 
@@ -1745,7 +1745,7 @@ initializeDataType: anInteger
 
 	cType := self class cTypeFor: anInteger! !
 
-!ODBCColumn methodsFor: 'initialization' stamp: 'jfr 11/13/2023 16:13:54'!
+!ODBCColumn methodsFor: 'initialization' stamp: 'RMV 10/30/2024 20:58:00'!
 initializeResultSet: aResultSet number: anInteger 
 	"initialize the receiver"
 	| columnName nameLenght columDataType columnSize decimalDigits columnNullable |
@@ -1782,11 +1782,11 @@ initializeResultSet: aResultSet number: anInteger
 	self initializeDataType: columDataType value.
 	""
 	self perform: initializeSelector.
-	bufferLenght := SQLInteger externalNew.
+	bufferLength := SQLInteger externalNew.
 	""
 	self bindBuffer! !
 
-!ODBCColumn methodsFor: 'data' stamp: 'dgd 6/2/2002 00:34'!
+!ODBCColumn methodsFor: 'data' stamp: 'RMV 10/30/2024 20:57:47'!
 data
 	"answer the data for this column in the current row"
 "
@@ -1797,10 +1797,10 @@ data
 				targetType: cType
 				targetValue: buffer
 				bufferLength: bufferHandle size
-				strLength: bufferLenght)
+				strLength: bufferLength)
 		statement: resultSetHandle.
 "
-	^ bufferLenght value == SQLNULLDATA
+	^ bufferLength value == SQLNULLDATA
 		ifFalse: [self perform: convertSelector]! !
 
 !ODBCColumn methodsFor: 'accessing' stamp: 'dgd 6/2/2002 23:40'!
