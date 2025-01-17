@@ -1,6 +1,6 @@
-'From Cuis7.1 [latest update: #6797] on 30 October 2024 at 9:06:56 pm'!
+'From Cuis7.3 [latest update: #6989] on 17 January 2025 at 11:47:29 am'!
 'Description '!
-!provides: 'ODBC' 1 9!
+!provides: 'ODBC' 1 10!
 !requires: 'FFI' 1 40 nil!
 SystemOrganization addCategory: #'ODBC-Constants'!
 SystemOrganization addCategory: #'ODBC-Core'!
@@ -2564,9 +2564,9 @@ initialize
 register: anObject 
 	self registry add: anObject! !
 
-!ODBCConnection class methodsFor: 'registry' stamp: 'dgd 5/26/2002 18:24'!
+!ODBCConnection class methodsFor: 'registry' stamp: 'jmv 1/17/2025 11:47:21'!
 registry
-	^ Registry ifNil: [Registry := WeakRegistry new]
+	^ Registry ifNil: [Registry := FinalizationRegistry new]
 ! !
 
 !ODBCConnection class methodsFor: 'registry' stamp: 'dgd 5/26/2002 18:25'!
