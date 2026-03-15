@@ -1,6 +1,6 @@
-'From Cuis7.6 [latest update: #7777] on 29 January 2026 at 10:57:51 pm'!
+'From Cuis7.6 [latest update: #7777] on 31 January 2026 at 5:43:19 pm'!
 'Description '!
-!provides: 'ODBC' 1 12!
+!provides: 'ODBC' 1 13!
 !requires: 'Network-Kernel' 1 12 nil!
 !requires: 'FFI' 1 40 nil!
 SystemOrganization addCategory: #'ODBC-Constants'!
@@ -278,6 +278,9 @@ ODBCStatement subclass: #ODBCPreparedStatement
 ODBCPreparedStatement class
 	instanceVariableNames: ''!
 
+
+!ODBCConstants commentStamp: 'OA 30/Jan/2026 20:56:56' prior: 0!
+ODBCConstants declares the constants defined in the technical specifications of ODBC.!
 
 !ODBCBoundParameter commentStamp: '<historical>' prior: 0!
 A bound parameter for an ODBC query.!
@@ -2509,10 +2512,10 @@ toSqlServer: serverString database: dbString user: userString password: password
 
 ! !
 
-!ODBCConnection class methodsFor: 'instance creation' stamp: 'jrp 15/Sep/2004 22:44:00'!
+!ODBCConnection class methodsFor: 'instance creation' stamp: 'OA 29/Jan/2026 23:09:04'!
 workstationId
 
-	^ Utilities authorNamePerSe, '@', NetNameResolver localHostName! !
+	^ Utilities authorInitials, '@', NetNameResolver localHostName! !
 
 !ODBCConnection class methodsFor: 'samples' stamp: 'ar 2/Aug/2008 13:56:00'!
 dsn: dsnString user: userString password: passwordString query: queryString 
