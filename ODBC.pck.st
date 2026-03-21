@@ -1,6 +1,6 @@
-'From Cuis7.6 [latest update: #7777] on 31 January 2026 at 5:43:19 pm'!
+'From Cuis7.6 [latest update: #7777] on 21 March 2026 at 6:40:07 am'!
 'Description '!
-!provides: 'ODBC' 1 13!
+!provides: 'ODBC' 1 14!
 !requires: 'Network-Kernel' 1 12 nil!
 !requires: 'FFI' 1 40 nil!
 SystemOrganization addCategory: #'ODBC-Constants'!
@@ -156,16 +156,6 @@ ExternalStructure subclass: #SQLUInteger
 	category: 'ODBC-Support'!
 !classDefinition: 'SQLUInteger class' category: #'ODBC-Support'!
 SQLUInteger class
-	instanceVariableNames: ''!
-
-!classDefinition: #ODBCResultTable category: #'ODBC-Core'!
-OrderedCollection subclass: #ODBCResultTable
-	instanceVariableNames: 'columns preferredColumnWidths extraLinkBlock extraLinkTitle columnPrintBlock'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ODBC-Core'!
-!classDefinition: 'ODBCResultTable class' category: #'ODBC-Core'!
-ODBCResultTable class
 	instanceVariableNames: ''!
 
 !classDefinition: #ODBCRow category: #'ODBC-Core'!
@@ -1114,196 +1104,6 @@ initialize
 	" Initialize the class "
 	self defineFields.! !
 
-!ODBCResultTable methodsFor: 'adding' stamp: 'rjl 4/Sep/2008 16:06:00'!
-add: row 
-	self maxWidthOfColumnsForRow: row.
-	^ super add: row! !
-
-!ODBCResultTable methodsFor: 'converting' stamp: 'rjl 4/Sep/2008 16:07:00'!
-asMorph
-	| twoWayScroller report title window |
-	report := TextMorph new
-		backgroundColor: Color transparent;
-		borderWidth: 0;
-		margins: 6;
-		beAllFont: (StrikeFont 
-				familyName: #BitstreamVeraSansMono
-				size: 12);
-		contents: (Text streamContents: [ :stream | self printTextOn: stream ]).
-	twoWayScroller := TwoWayScrollPane new
-		borderWidth: 0;
-		setScrollDeltas.
-	twoWayScroller scroller addMorph: report.
-	title := String streamContents: 
-		[ :stream | 
-		stream
-			nextPutAll: 'Query Results (';
-			nextPutAll: self size asString , ' row'.
-		self size ~= 1 ifTrue: [ stream nextPut: $s ].
-		stream nextPut: $) ].
-	window := (SystemWindow labelled: title) paneColor: (Color 
-			r: 1.0
-			g: 0.903
-			b: 0.258).
-	window extent: 700 @ 400.
-	window position: (Display extent - window extent) // 2.
-	^ window 
-		addMorph: twoWayScroller
-		fullFrame: (LayoutFrame fractions: (0 @ 0 extent: 1 @ 1))! !
-
-!ODBCResultTable methodsFor: 'converting' stamp: 'rjl 4/Sep/2008 16:07:00'!
-openAsMorph
-	self asMorph openAsIsIn: ActiveWorld! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-columnNames
-	^ self columns collect: [ :each | each name ]! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-columnPrintBlock
-	^ columnPrintBlock ifNil: [ self standardColumnPrintBlock ]! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-columnPrintBlock: aThreeArgBlock 
-	columnPrintBlock := aThreeArgBlock! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-columns
-	^ columns! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-columns: aList 
-	columns := aList reject: 
-		[ :each | 
-		#(
-			#DBConnect
-			#DBName
-			#DatabaseName
-			#ImportVersion
-			#Locked
-		) includes: each name ]! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-extraLinkTitle: aString do: aOneArgumentBlock 
-	extraLinkTitle := aString.
-	extraLinkBlock := aOneArgumentBlock! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-maxWidthOfColumn: anODBCColumn 
-	^ (preferredColumnWidths at: anODBCColumn) + 2! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-maxWidthOfColumnsForRow: row 
-	self columns do: 
-		[ :each | 
-		| currentWidth |
-		currentWidth := preferredColumnWidths 
-			at: each
-			ifAbsentPut: [ each name size ].
-		preferredColumnWidths 
-			at: each
-			put: (currentWidth max: (row at: each name) printString size) ]! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-preferredColumnWidths
-	"Return a list of associations so that column order is preserved"
-	^ self columns collect: [ :each | each -> (self maxWidthOfColumn: each) ]! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:09:00'!
-standardColumnPrintBlock
-	^ 
-	[ :row :column :textStream | 
-	| columnValue |
-	columnValue := row at: column key name.
-	columnValue isFraction ifTrue: [ columnValue := columnValue asFloat ].
-	textStream nextPutAll: (self class 
-			formatItem: columnValue asString
-			toWidth: column value) ]! !
-
-!ODBCResultTable methodsFor: 'initialization' stamp: 'rjl 4/Sep/2008 16:07:00'!
-initialize
-	preferredColumnWidths := Dictionary new! !
-
-!ODBCResultTable methodsFor: 'printing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-printHeaderOn: aStream 
-	self columns do: 
-		[ :each | 
-		| columnHeader |
-		columnHeader := self class 
-			formatItem: each name
-			toWidth: (self maxWidthOfColumn: each).
-		aStream nextPutAll: columnHeader ].
-	aStream cr.
-	self columns do: 
-		[ :each | 
-		aStream
-			nextPutAll: (String 
-					new: (self maxWidthOfColumn: each) - 1
-					withAll: $-);
-			nextPut: $  ].
-	aStream cr! !
-
-!ODBCResultTable methodsFor: 'printing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-printOn: aStream 
-	self printHeaderOn: aStream.
-	self do: 
-		[ :each | 
-		each 
-			printOn: aStream
-			withColumnDefinitions: self preferredColumnWidths.
-		aStream cr ]! !
-
-!ODBCResultTable methodsFor: 'printing' stamp: 'rjl 4/Sep/2008 16:09:00'!
-printTextForRow: aRow on: aTextStream 
-	self preferredColumnWidths do: 
-		[ :each | 
-		self columnPrintBlock 
-			value: aRow
-			value: each
-			value: aTextStream ].
-	extraLinkTitle ifNotNil: 
-		[ aTextStream 
-			withAttribute: (PluggableTextAttribute evalBlock: [ extraLinkBlock value: aRow ])
-			do: [ aTextStream nextPutAll: extraLinkTitle ] ].
-	aTextStream
-		space;
-		cr! !
-
-!ODBCResultTable methodsFor: 'printing' stamp: 'rjl 4/Sep/2008 16:09:00'!
-printTextOn: aTextStream 
-	self printHeaderOn: aTextStream.
-	self do: 
-		[ :each | 
-		self 
-			printTextForRow: each
-			on: aTextStream ]! !
-
-!ODBCResultTable methodsFor: 'private' stamp: 'rjl 4/Sep/2008 16:09:00'!
-species
-	^ OrderedCollection! !
-
-!ODBCResultTable class methodsFor: 'formatting' stamp: 'bvs 14/Apr/2004 14:15:00'!
-formatItem: aString toWidth: aNumber
-
-	^ aString
-		padded: #right 
-		to: aNumber
-		with: $ ! !
-
-!ODBCResultTable class methodsFor: 'instance creation' stamp: 'jrp 10/Mar/2004 13:23:00'!
-new
-
-	^ super new initialize! !
-
-!ODBCResultTable class methodsFor: 'instance creation' stamp: 'rjl 4/Sep/2008 16:06:00'!
-newFrom: anODBCResultSet 
-	| table |
-	table := self new.
-	table columns: anODBCResultSet columns.
-	anODBCResultSet do: [ :each | table add: each ].
-	anODBCResultSet close.
-	^ table! !
-
 !ODBCRow methodsFor: 'error handling' stamp: 'rjl 4/Sep/2008 15:25:00'!
 doesNotUnderstand: aMessage 
 	| originalSelector |
@@ -1318,18 +1118,6 @@ doesNotUnderstand: aMessage
 			at: each asSymbol
 			ifPresent: [ :val | ^ val ] ].
 	^ super doesNotUnderstand: aMessage! !
-
-!ODBCRow methodsFor: 'printing' stamp: 'rjl 4/Sep/2008 16:00:00'!
-printOn: aStream withColumnDefinitions: aList 
-	aList do: 
-		[ :each | 
-		aStream nextPutAll: (ODBCResultTable 
-				formatItem: (self at: each key name) asString
-				toWidth: each value) ]! !
-
-!ODBCResultSet methodsFor: 'converting' stamp: 'rjl 4/Sep/2008 15:59:00'!
-asTable
-	^ ODBCResultTable newFrom: self! !
 
 !ODBCResultSet methodsFor: 'testing' stamp: 'dgd 27/May/2002 23:14:00'!
 atEnd
@@ -2289,10 +2077,6 @@ resultSetFor: aString
 			self startUp.
 			secondTry := true.
 			err retry ]! !
-
-!ODBCConnection methodsFor: 'statements' stamp: 'rjl 4/Sep/2008 16:03:00'!
-run: aString 
-	^ (self resultSetFor: aString) asTable! !
 
 !ODBCConnection methodsFor: 'private - finalization' stamp: 'dgd 27/May/2002 20:55:00'!
 finalize

@@ -1,5 +1,9 @@
 # CHANGELOG.md
 
+# 1.14 (2025-03-21)
+
+* cleaning: remove the unnecessary and broken ODBCResultTable class
+
 # 1.13 (2025-01-29)
 
 * fix: Use authorInitials in ODBCConnection >> workstationId
