@@ -159,7 +159,7 @@ Create a `odbc.ini` file with contents similar to the following, which defines d
 
     [TodosDSN]
     Description = SQLite database for a Todo app
-    Driver = /opt/homebrew/lib/libsqlite3odbc.so
+    Driver = SQLite
     Database = /Users/volkmannm/Documents/dev/lang/smalltalk/Cuis-Smalltalk-Dev-UserFiles/todos.db
 
 The file `odbcinst.ini` associates driver names with paths to their shared libraries. In the `odbc.ini` file above, the `Driver` values is the absolute path to the driver shared library. But using driver names specfied in the `odbcinst.ini` file avoids needing to repeat the shared library paths for each data source that uses the same driver.
