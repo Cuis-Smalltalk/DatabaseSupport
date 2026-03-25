@@ -74,7 +74,7 @@ brew install unixodbc
 With [Homebrew](https://brew.sh), libraries are installed in the `/opt/homebrew/lib` directory.
 
 ## Database-specific Drivers
-Most databases provide an ODBC driver. Below you’ll find the installation procedure for the major open-source relational databases. For more specific products such as [Oracle](https://www.oracle.com/database/technologies/releasenote-odbc-ic.html) or [IBM Db2](https://www.ibm.com/docs/en/db2-warehouse?topic=db2-downloading-clients-drivers), we recommend consulting the official documentation.
+Most databases provide an [ODBC driver](https://www.unixodbc.org/drivers.html). Below you’ll find the installation procedure for the major open-source relational databases. For more specific products such as [Oracle](https://www.oracle.com/database/technologies/releasenote-odbc-ic.html) or [IBM Db2](https://www.ibm.com/docs/en/db2-warehouse?topic=db2-downloading-clients-drivers), we recommend consulting the official documentation.
 
 Download a database-specific driver for each kind of database being used. The installation method varies depending on the operating system used.
 
