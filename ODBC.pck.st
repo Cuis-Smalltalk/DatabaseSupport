@@ -1,6 +1,6 @@
-'From Cuis7.6 [latest update: #7777] on 23 March 2026 at 9:37:40 pm'!
+'From Cuis7.6 [latest update: #7777] on 25 March 2026 at 5:21:48 pm'!
 'Description '!
-!provides: 'ODBC' 1 16!
+!provides: 'ODBC' 1 17!
 !requires: 'Network-Kernel' 1 12 nil!
 !requires: 'FFI' 1 40 nil!
 SystemOrganization addCategory: #'ODBC-Constants'!
@@ -1433,10 +1433,10 @@ dateData
 		month: buffer month
 		year: buffer year! !
 
-!ODBCColumn methodsFor: 'private - type convertion' stamp: 'ar 2/Aug/2008 14:40:00'!
+!ODBCColumn methodsFor: 'private - type convertion' stamp: 'OA 25/Mar/2026 17:18:06'!
 dateTimeData
 	"answer the data for this column in the current row as a Date/Time"
-	^TimeStamp 
+	^DateAndTime 
 		year: buffer year
 		month: buffer month
 		day: buffer day

@@ -1,14 +1,15 @@
 # CHANGELOG.md
 
-# 1.16 (2025-03-23)
+# 1.17 (2025-03-25)
 
 * new: add ODBCConnection class >> dsn: for a data source that does not require authentication
 * new: update of the documentation about unit tests
 * fix: The INTEGER type is fixed. It was incorrectly defined as 64 bits instead of 32 bits
 * fix: improvement of the documentation for the SQLite data source
+* fix: incorrect TimeStamp class use in ODBColumn >> dateTimeData (replaced by DateTime class)
 * cleaning: remove the unnecessary and broken ODBCResultTable class
 
-# 1.13 (2025-01-29)
+# 1.13 (2025-03-15)
 
 * fix: Use authorInitials in ODBCConnection >> workstationId
 * fix: add requirement for Network-kernel package
