@@ -1,21 +1,37 @@
 # CHANGELOG.md
 
-# 1.17 (2025-03-25)
+# Unreleased
 
-* new: add ODBCConnection class >> dsn: for a data source that does not require authentication
-* new: update of the documentation about unit tests
-* fix: The INTEGER type is fixed. It was incorrectly defined as 64 bits instead of 32 bits
-* fix: improvement of the documentation for the SQLite data source
-* fix: incorrect TimeStamp class use in ODBColumn >> dateTimeData (replaced by DateTime class)
-* cleaning: remove the unnecessary and broken ODBCResultTable class
+## Added
+
+* `ODBCConnection class >> dsn:` for a data source that does not require authentication.
+* Documentation about unit tests.
+* Optional package `Tests-ODBC` containing unit tests.
+
+## Fixed
+
+* `SQLInteger` class is fixed (incorrectly defined as 64 bits instead of 32 bits).
+* Improvement of the documentation for the SQLite data source.
+* Incorrect `TimeStamp` class use in `ODBColumn >> dateTimeData` (replaced by `DateTime` class).
+
+## Removed
+
+* Unnecessary and broken `ODBCResultTable class`.
 
 # 1.13 (2025-03-15)
 
-* fix: Use authorInitials in ODBCConnection >> workstationId
-* fix: add requirement for Network-kernel package
-* Improvement of the documentation
+## Changed
+
+* Improvement of the documentation.
+* Requirement for `Network-kernel package`.
+
+## Fixed
+
+* Use `authorInitials` in `ODBCConnection >> workstationId`.
 
 # 1.12 (2025-01-09)
 
-* fix: ODBCStatement >> Execute: now supports SQL request with Unicode characters,
-* fix: ODBCColumn >> stringFromBuffer now supports SQL columns with Unicode Characters.  
+## Fixed
+
+* `ODBCStatement >> Execute:` now supports SQL request with Unicode characters.
+* `ODBCColumn >> stringFromBuffer` now supports SQL columns with Unicode Characters.  
