@@ -1,3 +1,5 @@
+![DatabaseSupport](assets/DatabaseSupport.png)
+
 # DatabaseSupport
 
 The DatabaseSupport package provides an [ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity) library for Cuis Smalltalk.
