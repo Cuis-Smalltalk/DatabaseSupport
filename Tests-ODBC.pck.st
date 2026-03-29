@@ -1,22 +1,22 @@
-'From Cuis7.6 [latest update: #7777] on 29 March 2026 at 10:05:53 pm'!
+'From Cuis7.6 [latest update: #7777] on 29 March 2026 at 10:22:54 pm'!
 'Description '!
-!provides: 'Tests-ODBC' 1 2!
+!provides: 'Tests-ODBC' 1 3!
 !requires: 'ODBC' 1 15 nil!
 SystemOrganization addCategory: #'Tests-ODBC'!
 
 
-!classDefinition: #OdbcTests category: #'Tests-ODBC'!
-TestCase subclass: #OdbcTests
+!classDefinition: #ODBCTests category: #'Tests-ODBC'!
+TestCase subclass: #ODBCTests
 	instanceVariableNames: 'connection'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Tests-ODBC'!
-!classDefinition: 'OdbcTests class' category: #'Tests-ODBC'!
-OdbcTests class
+!classDefinition: 'ODBCTests class' category: #'Tests-ODBC'!
+ODBCTests class
 	instanceVariableNames: ''!
 
 
-!OdbcTests methodsFor: 'setUp/tearDown' stamp: 'OA 29/Mar/2026 21:58:34'!
+!ODBCTests methodsFor: 'setUp/tearDown' stamp: 'OA 29/Mar/2026 21:58:34'!
 setUp 
 	| stmt queries |
 	
@@ -34,7 +34,7 @@ setUp
 		stmt execute.
 	]! !
 
-!OdbcTests methodsFor: 'setUp/tearDown' stamp: 'OA 22/Mar/2026 17:03:31'!
+!ODBCTests methodsFor: 'setUp/tearDown' stamp: 'OA 22/Mar/2026 17:03:31'!
 tearDown
 	| stmt |
 	
@@ -43,7 +43,7 @@ tearDown
 	
 	connection close.! !
 
-!OdbcTests methodsFor: 'tests' stamp: 'OA 29/Mar/2026 12:07:13'!
+!ODBCTests methodsFor: 'select' stamp: 'OA 29/Mar/2026 12:07:13'!
 testSelect
 	| stmt rs |
 	
@@ -61,7 +61,7 @@ testSelect
 	self assert: (rs at: #modified) = nil.
 		! !
 
-!OdbcTests methodsFor: 'tests' stamp: 'OA 29/Mar/2026 12:00:50'!
+!ODBCTests methodsFor: 'select' stamp: 'OA 29/Mar/2026 12:00:50'!
 testSelectCount
 	| stmt rs |
 	
@@ -70,7 +70,7 @@ testSelectCount
 	
 	self assert: (rs next at: #nbr) = 2.! !
 
-!OdbcTests methodsFor: 'tests' stamp: 'OA 29/Mar/2026 12:08:16'!
+!ODBCTests methodsFor: 'select' stamp: 'OA 29/Mar/2026 12:08:16'!
 testSelectWhere
 	| stmt rs |
 	
@@ -80,7 +80,7 @@ testSelectWhere
 	self assert: (rs at: #login) = 'psmith'. 
 ! !
 
-!OdbcTests methodsFor: 'tests' stamp: 'OA 29/Mar/2026 12:08:57'!
+!ODBCTests methodsFor: 'select' stamp: 'OA 29/Mar/2026 12:08:57'!
 testSelectWhereOrder
 	| stmt rs |
 	
@@ -90,7 +90,7 @@ testSelectWhereOrder
 	self assert: (rs at: #id) = 2. 
 ! !
 
-!OdbcTests methodsFor: 'tests' stamp: 'OA 29/Mar/2026 12:15:44'!
+!ODBCTests methodsFor: 'select' stamp: 'OA 29/Mar/2026 12:15:44'!
 testSelectWherePreparedStatement
 	| stmt rs |
 	
@@ -100,7 +100,7 @@ testSelectWherePreparedStatement
 	self assert: (rs at: #login) = 'jdoe'. 
 ! !
 
-!OdbcTests methodsFor: 'tests' stamp: 'OA 29/Mar/2026 22:00:38'!
+!ODBCTests methodsFor: 'select' stamp: 'OA 29/Mar/2026 22:00:38'!
 testSelectWherePreparedStatementWithParameters
 	| stmt rs |
 	
@@ -110,10 +110,10 @@ testSelectWherePreparedStatementWithParameters
 	self assert: (rs at: #email) = 'john.doe@cuis.org'. 
 ! !
 
-!OdbcTests methodsFor: 'accessing' stamp: 'OA 29/Mar/2026 11:46:25'!
+!ODBCTests methodsFor: 'accessing' stamp: 'OA 29/Mar/2026 11:46:25'!
 connection
 	^connection! !
 
-!OdbcTests methodsFor: 'accessing' stamp: 'OA 29/Mar/2026 11:46:55'!
+!ODBCTests methodsFor: 'accessing' stamp: 'OA 29/Mar/2026 11:46:55'!
 connection: anODBCConnection
 	connection := anODBCConnection ! !
