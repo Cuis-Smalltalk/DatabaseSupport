@@ -1,6 +1,6 @@
-'From Cuis7.6 [latest update: #7777] on 25 March 2026 at 5:21:48 pm'!
+'From Cuis7.6 [latest update: #7777] on 29 March 2026 at 10:03:28 pm'!
 'Description '!
-!provides: 'ODBC' 1 17!
+!provides: 'ODBC' 1 18!
 !requires: 'Network-Kernel' 1 12 nil!
 !requires: 'FFI' 1 40 nil!
 SystemOrganization addCategory: #'ODBC-Constants'!
@@ -2488,15 +2488,15 @@ bind: arguments
 	].
 ! !
 
-!ODBCStatement methodsFor: 'executing' stamp: 'fgz 2/Jul/2024 09:36:04'!
+!ODBCStatement methodsFor: 'executing' stamp: 'OA 29/Mar/2026 21:52:53'!
 bindArg: arg
 	"Bind the argument at the given position"
 	| buf sz |
 	"String arguments"
 	arg isString ifTrue:[
-		sz := arg size.
+		sz := arg utf8BytesSize.
 		buf := ExternalAddress allocate: sz.
-		1 to: sz do:[:b| buf unsignedByteAt: b put: (arg uint8At: b)].
+		1 to: sz do:[:b| buf unsignedByteAt: b put: (arg asUtf8Bytes at: b)].
 		^(ODBCBoundParameter new)
 			handle: buf; cType: SQLCCHAR; sqlType: SQLVARCHAR; 
 			colWidth: sz; size: sz].

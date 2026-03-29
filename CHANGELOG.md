@@ -13,6 +13,7 @@
 * `SQLInteger` class is fixed (incorrectly defined as 64 bits instead of 32 bits).
 * Improvement of the documentation for the SQLite data source.
 * Incorrect `TimeStamp` class use in `ODBColumn >> dateTimeData` (replaced by `DateTime` class).
+* An argument of a parameterized query can now contain a string. 
 
 ## Removed
 
