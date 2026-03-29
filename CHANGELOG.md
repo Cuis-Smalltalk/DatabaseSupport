@@ -6,7 +6,7 @@
 
 * `ODBCConnection class >> dsn:` for a data source that does not require authentication.
 * Documentation about unit tests.
-* Optional package `Tests-ODBC` containing unit tests.
+* Optional `Tests-ODBC` package that provides unit tests.
 
 ## Fixed
 
