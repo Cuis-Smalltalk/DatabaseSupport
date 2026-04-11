@@ -1,3 +1,5 @@
+![DatabaseSupport](assets/DatabaseSupport.png)
+
 # DatabaseSupport
 
 The DatabaseSupport package provides an [ODBC](https://en.wikipedia.org/wiki/Open_Database_Connectivity) library for Cuis Smalltalk.
@@ -74,7 +76,7 @@ brew install unixodbc
 With [Homebrew](https://brew.sh), libraries are installed in the `/opt/homebrew/lib` directory.
 
 ## Database-specific Drivers
-Most databases provide an ODBC driver. Below you’ll find the installation procedure for the major open-source relational databases. For more specific products such as [Oracle](https://www.oracle.com/database/technologies/releasenote-odbc-ic.html) or [IBM Db2](https://www.ibm.com/docs/en/db2-warehouse?topic=db2-downloading-clients-drivers), we recommend consulting the official documentation.
+Most databases provide an [ODBC driver](https://www.unixodbc.org/drivers.html). Below you’ll find the installation procedure for the major open-source relational databases. For more specific products such as [Oracle](https://www.oracle.com/database/technologies/releasenote-odbc-ic.html) or [IBM Db2](https://www.ibm.com/docs/en/db2-warehouse?topic=db2-downloading-clients-drivers), we recommend consulting the official documentation.
 
 Download a database-specific driver for each kind of database being used. The installation method varies depending on the operating system used.
 
@@ -159,7 +161,7 @@ Create a `odbc.ini` file with contents similar to the following, which defines d
 
     [TodosDSN]
     Description = SQLite database for a Todo app
-    Driver = /opt/homebrew/lib/libsqlite3odbc.so
+    Driver = SQLite
     Database = /Users/volkmannm/Documents/dev/lang/smalltalk/Cuis-Smalltalk-Dev-UserFiles/todos.db
 
 The file `odbcinst.ini` associates driver names with paths to their shared libraries. In the `odbc.ini` file above, the `Driver` values is the absolute path to the driver shared library. But using driver names specfied in the `odbcinst.ini` file avoids needing to repeat the shared library paths for each data source that uses the same driver.
@@ -208,10 +210,36 @@ This script also starts a Smalltalk VM using the base image. To use another imag
 ### Install the DatabaseConnection package
 Open an "Installed Packages" window and verify that the ODBC package is installed. If not, open a Workspace, enter `Feature require: 'ODBC'`, and "Do it".
 
-### Code snippets
+## How to use unit tests ?
+
+This section describes using unit tests to verify the proper functioning of the `DatabaseSupport` package. The instructions below are for Cuis‑Smalltalk in a Linux environment. If you are working on macOS, you must adapt the steps.
+
+If not present, you must install the ODBC driver for SQLite databases. This step differs depending on your operating system. On Linux, use the `apt` command:
+
+    # sudo apt install libsqliteodbc
+
+Create a SQLite database in the folder containing the `DatabaseSupport` package. This database must be named `unit_tests.db`.
+
+    # sqlite3 unit_tests.db
+
+If the ODBC driver for SQLite is not declared in the `odbcinst.ini` file, add the following section :
+
+    [SQLite]
+    Description=SQLite ODBC Driver
+    Driver=libsqlite3odbc.so
+    UsageCount=1
+
+Now declare the data source in the `odbc.ini` file. You must adjust the database path to match where you created it. The configuration file shown here is for Linux.
+
+    [UnitTestsDSN]
+    Description = SQLite test database for the DatabaseSupport package
+    Driver = SQLite
+    Database = /home/olivier/unit_tests.db
+
+## Code snippets
 These code snippets are practical and common examples for designing applications that use a relational database.
 
-#### A SQL query
+### A SQL query
 ```smalltalk
 conn := ODBCConnection dsn: 'TodosDSN' user: 'user' password: '1234'.
 stmt := conn query: 'select * from todos'.
@@ -222,7 +250,7 @@ rs do: [:row | row print].
 conn close.
 ```
 
-#### Get the list of columns of a table
+### Get the list of columns of a table
 This snippet is a practical example to extract metadata from a SQL object.
 
 ```smalltalk
@@ -237,7 +265,7 @@ columns do: [:column | column name print].
 conn close.
 ```
 
-#### Parameterized SQL query
+### Parameterized SQL query
 Using parameters makes it easier to construct the query by avoiding string concatenation, which can make the code difficult to read and complex to evolve.
 
 ```smalltalk
@@ -250,7 +278,7 @@ rs do: [:row | row print].
 conn close.
 ```
 
-#### Prepared Statements
+### Prepared Statements
 A prepared statement is compiled by the database server. Its execution will be faster if it is reused. 
 
 ```smalltalk
@@ -264,7 +292,7 @@ rs do: [:row | row print].
 conn close.
 ```
 
-#### A prepared statement with parameters
+### A prepared statement with parameters
 It is recommended to use prepared statements built with parameters to prevent [SQL injections](https://www.w3schools.com/sql/sql_injection.asp).
 
 ```smalltalk
@@ -278,7 +306,7 @@ rs do: [:row | row print].
 conn close.
 ```
 
-#### Transactions
+### Transactions
 A transaction is a sequence of one or more operations that are treated as a single unit of work. Transactions ensure that all operations within the block are completed successfully; if any part fails, the transaction can be rolled back, leaving the system in a consistent state. Transactions are typically used in databases to maintain data integrity and consistency.
 
 A transaction block starts with `beginTransaction`. Use `commitTransaction` to validate a transaction or `rollbackTransaction` to cancel one.
@@ -294,4 +322,3 @@ conn commitTransaction.
 
 conn close.
 ```
-

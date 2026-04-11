@@ -1,6 +1,6 @@
-'From Cuis7.6 [latest update: #7777] on 31 January 2026 at 5:43:19 pm'!
+'From Cuis7.6 [latest update: #7777] on 9 April 2026 at 9:22:04 pm'!
 'Description '!
-!provides: 'ODBC' 1 13!
+!provides: 'ODBC' 1 19!
 !requires: 'Network-Kernel' 1 12 nil!
 !requires: 'FFI' 1 40 nil!
 SystemOrganization addCategory: #'ODBC-Constants'!
@@ -156,16 +156,6 @@ ExternalStructure subclass: #SQLUInteger
 	category: 'ODBC-Support'!
 !classDefinition: 'SQLUInteger class' category: #'ODBC-Support'!
 SQLUInteger class
-	instanceVariableNames: ''!
-
-!classDefinition: #ODBCResultTable category: #'ODBC-Core'!
-OrderedCollection subclass: #ODBCResultTable
-	instanceVariableNames: 'columns preferredColumnWidths extraLinkBlock extraLinkTitle columnPrintBlock'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ODBC-Core'!
-!classDefinition: 'ODBCResultTable class' category: #'ODBC-Core'!
-ODBCResultTable class
 	instanceVariableNames: ''!
 
 !classDefinition: #ODBCRow category: #'ODBC-Core'!
@@ -871,24 +861,24 @@ initialize
 	" Initialize the class "
 	self defineFields.! !
 
-!SQLInteger methodsFor: 'accessing' stamp: ''!
+!SQLInteger methodsFor: 'accessing' stamp: 'OA 23/Mar/2026 18:10:40'!
 value
 	"This method was automatically generated. See SQLInteger class>>fields."
 	<generated>
-	^handle int64At: 1! !
+	^handle int32At: 1! !
 
-!SQLInteger methodsFor: 'accessing' stamp: ''!
+!SQLInteger methodsFor: 'accessing' stamp: 'OA 23/Mar/2026 18:11:07'!
 value: anObject
 	"This method was automatically generated. See SQLInteger class>>fields."
 	<generated>
-	handle int64At: 1 put: anObject! !
+	handle int32At: 1 put: anObject! !
 
-!SQLInteger class methodsFor: 'accessing' stamp: 'jfr 14/Nov/2023 17:01:22'!
+!SQLInteger class methodsFor: 'accessing' stamp: 'OA 23/Mar/2026 18:11:42'!
 fields
 	" 
 	SQLInteger defineFields 
 	"
-	^ #(#(#value 'int3264') )! !
+	^ #(#(#value 'int32') )! !
 
 !SQLInteger class methodsFor: 'accessing' stamp: 'jfr 14/Nov/2023 16:59:24'!
 initialize
@@ -1114,196 +1104,6 @@ initialize
 	" Initialize the class "
 	self defineFields.! !
 
-!ODBCResultTable methodsFor: 'adding' stamp: 'rjl 4/Sep/2008 16:06:00'!
-add: row 
-	self maxWidthOfColumnsForRow: row.
-	^ super add: row! !
-
-!ODBCResultTable methodsFor: 'converting' stamp: 'rjl 4/Sep/2008 16:07:00'!
-asMorph
-	| twoWayScroller report title window |
-	report := TextMorph new
-		backgroundColor: Color transparent;
-		borderWidth: 0;
-		margins: 6;
-		beAllFont: (StrikeFont 
-				familyName: #BitstreamVeraSansMono
-				size: 12);
-		contents: (Text streamContents: [ :stream | self printTextOn: stream ]).
-	twoWayScroller := TwoWayScrollPane new
-		borderWidth: 0;
-		setScrollDeltas.
-	twoWayScroller scroller addMorph: report.
-	title := String streamContents: 
-		[ :stream | 
-		stream
-			nextPutAll: 'Query Results (';
-			nextPutAll: self size asString , ' row'.
-		self size ~= 1 ifTrue: [ stream nextPut: $s ].
-		stream nextPut: $) ].
-	window := (SystemWindow labelled: title) paneColor: (Color 
-			r: 1.0
-			g: 0.903
-			b: 0.258).
-	window extent: 700 @ 400.
-	window position: (Display extent - window extent) // 2.
-	^ window 
-		addMorph: twoWayScroller
-		fullFrame: (LayoutFrame fractions: (0 @ 0 extent: 1 @ 1))! !
-
-!ODBCResultTable methodsFor: 'converting' stamp: 'rjl 4/Sep/2008 16:07:00'!
-openAsMorph
-	self asMorph openAsIsIn: ActiveWorld! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-columnNames
-	^ self columns collect: [ :each | each name ]! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-columnPrintBlock
-	^ columnPrintBlock ifNil: [ self standardColumnPrintBlock ]! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-columnPrintBlock: aThreeArgBlock 
-	columnPrintBlock := aThreeArgBlock! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-columns
-	^ columns! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-columns: aList 
-	columns := aList reject: 
-		[ :each | 
-		#(
-			#DBConnect
-			#DBName
-			#DatabaseName
-			#ImportVersion
-			#Locked
-		) includes: each name ]! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-extraLinkTitle: aString do: aOneArgumentBlock 
-	extraLinkTitle := aString.
-	extraLinkBlock := aOneArgumentBlock! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-maxWidthOfColumn: anODBCColumn 
-	^ (preferredColumnWidths at: anODBCColumn) + 2! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-maxWidthOfColumnsForRow: row 
-	self columns do: 
-		[ :each | 
-		| currentWidth |
-		currentWidth := preferredColumnWidths 
-			at: each
-			ifAbsentPut: [ each name size ].
-		preferredColumnWidths 
-			at: each
-			put: (currentWidth max: (row at: each name) printString size) ]! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-preferredColumnWidths
-	"Return a list of associations so that column order is preserved"
-	^ self columns collect: [ :each | each -> (self maxWidthOfColumn: each) ]! !
-
-!ODBCResultTable methodsFor: 'accessing' stamp: 'rjl 4/Sep/2008 16:09:00'!
-standardColumnPrintBlock
-	^ 
-	[ :row :column :textStream | 
-	| columnValue |
-	columnValue := row at: column key name.
-	columnValue isFraction ifTrue: [ columnValue := columnValue asFloat ].
-	textStream nextPutAll: (self class 
-			formatItem: columnValue asString
-			toWidth: column value) ]! !
-
-!ODBCResultTable methodsFor: 'initialization' stamp: 'rjl 4/Sep/2008 16:07:00'!
-initialize
-	preferredColumnWidths := Dictionary new! !
-
-!ODBCResultTable methodsFor: 'printing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-printHeaderOn: aStream 
-	self columns do: 
-		[ :each | 
-		| columnHeader |
-		columnHeader := self class 
-			formatItem: each name
-			toWidth: (self maxWidthOfColumn: each).
-		aStream nextPutAll: columnHeader ].
-	aStream cr.
-	self columns do: 
-		[ :each | 
-		aStream
-			nextPutAll: (String 
-					new: (self maxWidthOfColumn: each) - 1
-					withAll: $-);
-			nextPut: $  ].
-	aStream cr! !
-
-!ODBCResultTable methodsFor: 'printing' stamp: 'rjl 4/Sep/2008 16:07:00'!
-printOn: aStream 
-	self printHeaderOn: aStream.
-	self do: 
-		[ :each | 
-		each 
-			printOn: aStream
-			withColumnDefinitions: self preferredColumnWidths.
-		aStream cr ]! !
-
-!ODBCResultTable methodsFor: 'printing' stamp: 'rjl 4/Sep/2008 16:09:00'!
-printTextForRow: aRow on: aTextStream 
-	self preferredColumnWidths do: 
-		[ :each | 
-		self columnPrintBlock 
-			value: aRow
-			value: each
-			value: aTextStream ].
-	extraLinkTitle ifNotNil: 
-		[ aTextStream 
-			withAttribute: (PluggableTextAttribute evalBlock: [ extraLinkBlock value: aRow ])
-			do: [ aTextStream nextPutAll: extraLinkTitle ] ].
-	aTextStream
-		space;
-		cr! !
-
-!ODBCResultTable methodsFor: 'printing' stamp: 'rjl 4/Sep/2008 16:09:00'!
-printTextOn: aTextStream 
-	self printHeaderOn: aTextStream.
-	self do: 
-		[ :each | 
-		self 
-			printTextForRow: each
-			on: aTextStream ]! !
-
-!ODBCResultTable methodsFor: 'private' stamp: 'rjl 4/Sep/2008 16:09:00'!
-species
-	^ OrderedCollection! !
-
-!ODBCResultTable class methodsFor: 'formatting' stamp: 'bvs 14/Apr/2004 14:15:00'!
-formatItem: aString toWidth: aNumber
-
-	^ aString
-		padded: #right 
-		to: aNumber
-		with: $ ! !
-
-!ODBCResultTable class methodsFor: 'instance creation' stamp: 'jrp 10/Mar/2004 13:23:00'!
-new
-
-	^ super new initialize! !
-
-!ODBCResultTable class methodsFor: 'instance creation' stamp: 'rjl 4/Sep/2008 16:06:00'!
-newFrom: anODBCResultSet 
-	| table |
-	table := self new.
-	table columns: anODBCResultSet columns.
-	anODBCResultSet do: [ :each | table add: each ].
-	anODBCResultSet close.
-	^ table! !
-
 !ODBCRow methodsFor: 'error handling' stamp: 'rjl 4/Sep/2008 15:25:00'!
 doesNotUnderstand: aMessage 
 	| originalSelector |
@@ -1318,18 +1118,6 @@ doesNotUnderstand: aMessage
 			at: each asSymbol
 			ifPresent: [ :val | ^ val ] ].
 	^ super doesNotUnderstand: aMessage! !
-
-!ODBCRow methodsFor: 'printing' stamp: 'rjl 4/Sep/2008 16:00:00'!
-printOn: aStream withColumnDefinitions: aList 
-	aList do: 
-		[ :each | 
-		aStream nextPutAll: (ODBCResultTable 
-				formatItem: (self at: each key name) asString
-				toWidth: each value) ]! !
-
-!ODBCResultSet methodsFor: 'converting' stamp: 'rjl 4/Sep/2008 15:59:00'!
-asTable
-	^ ODBCResultTable newFrom: self! !
 
 !ODBCResultSet methodsFor: 'testing' stamp: 'dgd 27/May/2002 23:14:00'!
 atEnd
@@ -1403,7 +1191,7 @@ connection
 contents
 	^ self shouldNotImplement! !
 
-!ODBCResultSet methodsFor: 'accessing' stamp: 'jfr 13/Nov/2023 16:02:24'!
+!ODBCResultSet methodsFor: 'accessing' stamp: 'OA 22/Mar/2026 18:23:11'!
 fetchRow
 	"private - fetch the next row"
 	| row ret |
@@ -1462,7 +1250,7 @@ unregisterForFinalization
 	finalization notification"
 	connection class unregister: self! !
 
-!ODBCResultSet methodsFor: 'initialization' stamp: 'jfr 13/Nov/2023 16:02:30'!
+!ODBCResultSet methodsFor: 'initialization' stamp: 'OA 23/Mar/2026 16:24:46'!
 initializeConnection: aConnection statement: aStatement 
 	"initialize the receiver"
 	| columnCount |
@@ -1606,7 +1394,7 @@ initialize
 	digits := 0.
 	size := 0.! !
 
-!ODBCColumn methodsFor: 'private - type convertion' stamp: 'RMV 30/Oct/2024 20:54:58'!
+!ODBCColumn methodsFor: 'private - type convertion' stamp: 'OA 23/Mar/2026 17:47:20'!
 asNumber: aString 
 	"creates a Number from aString. Could be an Integer or a Fraction"
 	| stream zero sign integerPart char fractionPart scale |
@@ -1645,10 +1433,10 @@ dateData
 		month: buffer month
 		year: buffer year! !
 
-!ODBCColumn methodsFor: 'private - type convertion' stamp: 'ar 2/Aug/2008 14:40:00'!
+!ODBCColumn methodsFor: 'private - type convertion' stamp: 'OA 25/Mar/2026 17:18:06'!
 dateTimeData
 	"answer the data for this column in the current row as a Date/Time"
-	^TimeStamp 
+	^DateAndTime 
 		year: buffer year
 		month: buffer month
 		day: buffer day
@@ -1657,7 +1445,7 @@ dateTimeData
 		second: buffer second
 ! !
 
-!ODBCColumn methodsFor: 'private - type convertion' stamp: 'dgd 31/May/2002 22:05:00'!
+!ODBCColumn methodsFor: 'private - type convertion' stamp: 'OA 23/Mar/2026 17:14:40'!
 doubleData
 	"answer the data for this column in the current row as an Double"
 	^ buffer value! !
@@ -1667,10 +1455,9 @@ floatData
 	"answer the data for this column in the current row as an Float"
 	^ buffer value! !
 
-!ODBCColumn methodsFor: 'private - type convertion' stamp: 'dgd 31/May/2002 22:05:00'!
+!ODBCColumn methodsFor: 'private - type convertion' stamp: 'OA 23/Mar/2026 17:14:45'!
 integerData
 	"answer the data for this column in the current row as an Integer"
-
 	^ buffer value! !
 
 !ODBCColumn methodsFor: 'private - type convertion' stamp: 'dgd 2/Jun/2002 00:59:00'!
@@ -1708,7 +1495,7 @@ timeData
 
 	^ Time fromSeconds: buffer hour * 3600 + (buffer minute * 60) + buffer second! !
 
-!ODBCColumn methodsFor: 'initialization' stamp: 'RMV 30/Oct/2024 20:57:35'!
+!ODBCColumn methodsFor: 'initialization' stamp: 'OA 23/Mar/2026 16:08:40'!
 bindBuffer
 	"bind the column's buffer"
 	| bufferSize bufferHandle |
@@ -1743,15 +1530,15 @@ free
 	buffer notNil
 		ifTrue: [buffer free]! !
 
-!ODBCColumn methodsFor: 'initialization' stamp: 'dgd 2/Jun/2002 20:20:00'!
+!ODBCColumn methodsFor: 'initialization' stamp: 'OA 23/Mar/2026 18:03:28'!
 initializeDataType: anInteger 
 	dataType := self class dataTypeNameFor: anInteger.
 	convertSelector := self class convertBufferSelectorFor: anInteger.
 	initializeSelector := self class initializeBufferSelectorFor: anInteger.
-
+	
 	cType := self class cTypeFor: anInteger! !
 
-!ODBCColumn methodsFor: 'initialization' stamp: 'RMV 30/Oct/2024 20:58:00'!
+!ODBCColumn methodsFor: 'initialization' stamp: 'OA 23/Mar/2026 17:02:51'!
 initializeResultSet: aResultSet number: anInteger 
 	"initialize the receiver"
 	| columnName nameLenght columDataType columnSize decimalDigits columnNullable |
@@ -1898,7 +1685,7 @@ convertBufferSelectorFor: anInteger
 		ifPresent: [:pair | ^ pair second].
 	^ #stringData! !
 
-!ODBCColumn class methodsFor: 'data types' stamp: 'dgd 31/May/2002 21:31:00'!
+!ODBCColumn class methodsFor: 'data types' stamp: 'OA 23/Mar/2026 17:11:06'!
 dataTypeNameFor: anInteger 
 	"answer the datatype name for anInteger"
 	DataTypes
@@ -2290,10 +2077,6 @@ resultSetFor: aString
 			secondTry := true.
 			err retry ]! !
 
-!ODBCConnection methodsFor: 'statements' stamp: 'rjl 4/Sep/2008 16:03:00'!
-run: aString 
-	^ (self resultSetFor: aString) asTable! !
-
 !ODBCConnection methodsFor: 'private - finalization' stamp: 'dgd 27/May/2002 20:55:00'!
 finalize
 	self closeNotFail! !
@@ -2468,6 +2251,17 @@ closeAll
 	ODBCConnection allInstances
 		do: [:each | each close].
 self registry finalizeValues! !
+
+!ODBCConnection class methodsFor: 'instance creation' stamp: 'OA 22/Mar/2026 15:24:54'!
+dsn: dsnString 
+	"creates a new instance of the receiver and open the connection without authentication"
+	| instance |
+	instance := self new
+				initializeDsn: dsnString
+				user: ''
+				password: ''.
+	[instance open] on: ODBCWarning do: [:e | e resume ].
+	^ instance! !
 
 !ODBCConnection class methodsFor: 'instance creation' stamp: 'rjl 4/Sep/2008 15:33:00'!
 dsn: dsnString user: userString password: passwordString 
@@ -2694,15 +2488,15 @@ bind: arguments
 	].
 ! !
 
-!ODBCStatement methodsFor: 'executing' stamp: 'fgz 2/Jul/2024 09:36:04'!
+!ODBCStatement methodsFor: 'executing' stamp: 'OA 29/Mar/2026 21:52:53'!
 bindArg: arg
 	"Bind the argument at the given position"
 	| buf sz |
 	"String arguments"
 	arg isString ifTrue:[
-		sz := arg size.
+		sz := arg utf8BytesSize.
 		buf := ExternalAddress allocate: sz.
-		1 to: sz do:[:b| buf unsignedByteAt: b put: (arg uint8At: b)].
+		1 to: sz do:[:b| buf unsignedByteAt: b put: (arg asUtf8Bytes at: b)].
 		^(ODBCBoundParameter new)
 			handle: buf; cType: SQLCCHAR; sqlType: SQLVARCHAR; 
 			colWidth: sz; size: sz].
@@ -2771,7 +2565,7 @@ execute: args
 	
 	^ODBCResultSet connection: connection statement: self! !
 
-!ODBCStatement methodsFor: 'executing' stamp: 'fgz 2/Jul/2024 09:36:14'!
+!ODBCStatement methodsFor: 'executing' stamp: 'OA 1/Apr/2026 20:34:24'!
 fillArg: buf with: arg
 	"Fill a bound parameter with a new value. Answer true if successful, false otherwise"
 	| argHandle |
@@ -2781,8 +2575,8 @@ fillArg: buf with: arg
 	buf sqlType caseOf: {
 		[SQLVARCHAR] -> [
 			arg isString ifFalse:[^false].
-			arg size > buf size ifTrue:[^false].
-			1 to: arg size do:[:b| argHandle unsignedByteAt: b put: (arg uint8At: b)].
+			arg utf8BytesSize > buf size ifTrue:[^false].
+			1 to: arg size do:[:b| argHandle unsignedByteAt: b put: (arg asByteArray at: b)].
 			^true
 		].
 		[SQLINTEGER] -> [
