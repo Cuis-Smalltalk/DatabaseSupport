@@ -1,6 +1,6 @@
-'From Cuis7.6 [latest update: #7777] on 29 March 2026 at 10:22:54 pm'!
+'From Cuis7.6 [latest update: #7777] on 11 April 2026 at 6:40:00 pm'!
 'Description '!
-!provides: 'Tests-ODBC' 1 3!
+!provides: 'Tests-ODBC' 1 5!
 !requires: 'ODBC' 1 15 nil!
 SystemOrganization addCategory: #'Tests-ODBC'!
 
@@ -43,17 +43,17 @@ tearDown
 	
 	connection close.! !
 
-!ODBCTests methodsFor: 'select' stamp: 'OA 29/Mar/2026 12:07:13'!
+!ODBCTests methodsFor: 'select' stamp: 'OA 9/Apr/2026 19:02:05'!
 testSelect
 	| stmt rs |
 	
-	stmt := connection query: 'SELECT * FROM users'.
+	stmt := connection query: 'SELECT * FROM users WHERE id=1'.
 	rs := (stmt execute) next.
 	
 	self assert: (rs isNil) not.
 	self assert: (rs at: #id) = 1.
 	self assert: (rs at: #login) = 'jdoe'. 
-	self assert: (rs at: #email) = 'john.doe@cuis.org'. 
+	self assert: (rs at: #password) = 'ééàà1234'. 
 	self assert: (rs at: #email) = 'john.doe@cuis.org'. 
 	self assert: (rs at: #value) = 42. 
 	self assert: (rs at: #score) = 3.14156.
@@ -109,6 +109,126 @@ testSelectWherePreparedStatementWithParameters
 	
 	self assert: (rs at: #email) = 'john.doe@cuis.org'. 
 ! !
+
+!ODBCTests methodsFor: 'delete' stamp: 'OA 9/Apr/2026 21:07:05'!
+testDelete
+   | stmt rs |
+
+	stmt := connection query: 'DELETE FROM users WHERE id=1'.
+	stmt execute.
+
+    	stmt := connection query: 'SELECT COUNT(*) AS nbr FROM users'.
+    	rs := stmt execute.
+    
+    	self assert: (rs next at: #nbr) = 1.! !
+
+!ODBCTests methodsFor: 'delete' stamp: 'OA 9/Apr/2026 21:08:40'!
+testDeletePreparedStatementWithParameters
+    | rs stmt |
+    
+	stmt := connection prepare: 'DELETE FROM users WHERE id = ?;'.
+    
+	rs := stmt execute: (Array with: 1).
+
+    	stmt := connection query: 'SELECT COUNT(*) AS nbr FROM users'.
+    	rs := stmt execute.
+    
+    	self assert: (rs next at: #nbr) = 1.! !
+
+!ODBCTests methodsFor: 'update' stamp: 'OA 9/Apr/2026 19:05:35'!
+testUpdate
+   | stmt rs |
+
+	stmt := connection query: 'UPDATE users SET password=''kkkkkk'', email=''jjdoe@cuis.org'' WHERE id=1'.
+	stmt execute.
+
+	stmt := connection query: 'SELECT * FROM users WHERE id=1'.
+	rs := (stmt execute) next.
+	
+	self assert: (rs at: #password) = 'kkkkkk'. 
+	self assert: (rs at: #email) = 'jjdoe@cuis.org'. 
+	   ! !
+
+!ODBCTests methodsFor: 'update' stamp: 'OA 9/Apr/2026 21:09:57'!
+testUpdatePreparedStatementWithParameters
+   | stmt rs |
+
+	stmt := connection prepare: 'UPDATE users SET password=?, email=? WHERE id=?'.
+    
+	rs := stmt execute: (Array with: 'kéàçè' with: 'jjdoe@cuis.org' with: 1).
+
+	stmt := connection query: 'SELECT * FROM users WHERE id=1'.
+	rs := (stmt execute) next.
+	
+	self assert: (rs at: #password) = 'kéàçè'. 
+	self assert: (rs at: #email) = 'jjdoe@cuis.org'. 
+	   ! !
+
+!ODBCTests methodsFor: 'insert' stamp: 'OA 31/Mar/2026 21:45:43'!
+testInsert
+    | stmt rs |
+        
+    1 to: 10 do: [  :i |
+        | user email |
+        user := 'user' , i asString.
+        email := user , '@cuis.org'.
+        stmt := connection query: 'INSERT INTO users(login,email) VALUES(''',user,''',''',email,''');'.
+        stmt execute.
+    ].
+
+    stmt := connection query: 'SELECT COUNT(*) AS nbr FROM users'.
+    rs := stmt execute.
+    
+    self assert: (rs next at: #nbr) = 12.! !
+
+!ODBCTests methodsFor: 'insert' stamp: 'OA 5/Apr/2026 07:20:44'!
+testInsertPreparedStatementWithParameters
+    | rs stmt |
+    
+	stmt := connection prepare: 'INSERT INTO users(login,email) VALUES(?,?);'.
+    
+	rs := stmt execute: (Array with: 'user1' with: 'user1@cuis.org').
+	
+    	stmt := connection query: 'SELECT COUNT(*) AS nbr FROM users'.
+    	rs := stmt execute.
+    
+   	self assert: (rs next at: #nbr) = 3.! !
+
+!ODBCTests methodsFor: 'insert' stamp: 'OA 11/Apr/2026 18:37:45'!
+testInsertPreparedStatementsWithParameters
+	"This test fails and causes the system to become unstable."
+	
+    "| rs stmt |
+    
+	stmt := connection prepare: 'INSERT INTO users(login,email) VALUES(?,?);'.
+    
+	rs := stmt execute: (Array with: 'user1' with: 'user1@cuis.org').
+    	rs := stmt execute: (Array with: 'user2' with: 'user2@cuis.org').
+
+    	stmt := connection query: 'SELECT COUNT(*) AS nbr FROM users'.
+    	rs := stmt execute.
+    
+   	self assert: (rs next at: #nbr) = 4."! !
+
+!ODBCTests methodsFor: 'insert' stamp: 'OA 11/Apr/2026 18:37:57'!
+testLoopInsertPreparedStatementWithParameters
+	"This test fails and causes the system to become unstable."
+	
+   "| stmt rs |
+    
+    stmt := connection prepare: 'INSERT INTO users(login,email) VALUES(?,?);'.
+        
+    1 to: 10 do: [  :i |
+        | user email |
+        user := 'user' , i asString.
+        email := user , '@cuis.org'.
+        stmt execute: (Array with: user with: email).
+    ].
+
+    stmt := connection query: 'SELECT COUNT(*) AS nbr FROM users'.
+    rs := stmt execute.
+    
+    self assert: (rs next at: #nbr) = 12."! !
 
 !ODBCTests methodsFor: 'accessing' stamp: 'OA 29/Mar/2026 11:46:25'!
 connection

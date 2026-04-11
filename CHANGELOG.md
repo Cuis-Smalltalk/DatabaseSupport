@@ -1,25 +1,28 @@
 # CHANGELOG.md
 
-# Unreleased
+# 1.19 (2026-04-11)
 
 ## Added
 
 * `ODBCConnection class >> dsn:` for a data source that does not require authentication.
+* Optional `Tests-ODBC` package for unit tests.
 * Documentation about unit tests.
-* Optional `Tests-ODBC` package that provides unit tests.
+* The project's language is set to `Smalltalk` on GitHub.
+* A logo for the project :)
 
 ## Fixed
 
-* `SQLInteger` class is fixed (incorrectly defined as 64 bits instead of 32 bits).
-* Improvement of the documentation for the SQLite data source.
-* Incorrect `TimeStamp` class use in `ODBColumn >> dateTimeData` (replaced by `DateTime` class).
+* `SQLInteger` class uses 32-bit values instead of 64-bit values (https://www.unixodbc.org/doc/ODBC64.html).
+* Incorrect `TimeStamp` class in `ODBColumn >> dateTimeData` (replaced by the `DateTime` class).
 * An argument of a parameterized query can now contain a string. 
+* Support of UTF8 strings in ODBCStatement >> fillArg:with:
+* Improvement of the documentation for the SQLite data source.
 
 ## Removed
 
-* Unnecessary and broken `ODBCResultTable class`.
+* Unnecessary and broken `ODBCResultTable` class.
 
-# 1.13 (2025-03-15)
+# 1.13 (2026-03-15)
 
 ## Changed
 
@@ -30,7 +33,7 @@
 
 * Use `authorInitials` in `ODBCConnection >> workstationId`.
 
-# 1.12 (2025-01-09)
+# 1.12 (2026-01-09)
 
 ## Fixed
 

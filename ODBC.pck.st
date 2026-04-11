@@ -1,6 +1,6 @@
-'From Cuis7.6 [latest update: #7777] on 29 March 2026 at 10:03:28 pm'!
+'From Cuis7.6 [latest update: #7777] on 9 April 2026 at 9:22:04 pm'!
 'Description '!
-!provides: 'ODBC' 1 18!
+!provides: 'ODBC' 1 19!
 !requires: 'Network-Kernel' 1 12 nil!
 !requires: 'FFI' 1 40 nil!
 SystemOrganization addCategory: #'ODBC-Constants'!
@@ -2565,7 +2565,7 @@ execute: args
 	
 	^ODBCResultSet connection: connection statement: self! !
 
-!ODBCStatement methodsFor: 'executing' stamp: 'fgz 2/Jul/2024 09:36:14'!
+!ODBCStatement methodsFor: 'executing' stamp: 'OA 1/Apr/2026 20:34:24'!
 fillArg: buf with: arg
 	"Fill a bound parameter with a new value. Answer true if successful, false otherwise"
 	| argHandle |
@@ -2575,8 +2575,8 @@ fillArg: buf with: arg
 	buf sqlType caseOf: {
 		[SQLVARCHAR] -> [
 			arg isString ifFalse:[^false].
-			arg size > buf size ifTrue:[^false].
-			1 to: arg size do:[:b| argHandle unsignedByteAt: b put: (arg uint8At: b)].
+			arg utf8BytesSize > buf size ifTrue:[^false].
+			1 to: arg size do:[:b| argHandle unsignedByteAt: b put: (arg asByteArray at: b)].
 			^true
 		].
 		[SQLINTEGER] -> [
